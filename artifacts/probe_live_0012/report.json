@@ -1,0 +1,234 @@
+{
+  "image": "live_snapshots\\frame_0012.jpg",
+  "capture": {
+    "frame": [
+      1280,
+      720
+    ],
+    "source": "offline_image",
+    "window_only": true
+  },
+  "model": {
+    "loaded": true,
+    "processor_loaded": true,
+    "fresh": false,
+    "load_error": null
+  },
+  "players": {
+    "raw_person": 0.0,
+    "pitch_validated": 0.0,
+    "ui_rejected": 0.0,
+    "size_rejected": 0.0,
+    "pitch_rejected": 0.0,
+    "player_candidates": 6.0,
+    "tracks": 6.0,
+    "marker_candidates": 1.0,
+    "active_confidence": 0.0,
+    "ball_confidence": 0.0,
+    "ball_predicted": 0.0,
+    "score_confidence": 0.9500000000000001,
+    "score_initialized": 1.0,
+    "score_changed": 0.0
+  },
+  "team": {
+    "our": 2,
+    "opp": 2,
+    "unknown": 2
+  },
+  "active": {
+    "valid": false,
+    "track_id": -1,
+    "confidence": 0.0,
+    "marker_candidates": 1,
+    "matched_track_id": -1,
+    "association_score": 1.0
+  },
+  "ball": {
+    "valid": false,
+    "confidence": 0.0,
+    "source": "UNKNOWN",
+    "predicted": false,
+    "position": [
+      0.5,
+      0.5
+    ],
+    "velocity": [
+      0.0,
+      0.0
+    ],
+    "rtdetr_confidence": 0.0,
+    "cv_confidence": 0.8324308556868049,
+    "selected_source": "UNKNOWN",
+    "final_confidence": 0.0,
+    "field_valid": false,
+    "ui_rejected": false,
+    "temporal_consistency": false,
+    "cv_candidates": 33,
+    "detector_candidates": 0,
+    "fusion_corroborated": false,
+    "fusion_distance": null,
+    "fusion_confidence_bonus": 0.0
+  },
+  "tracking": {
+    "players": 6,
+    "unknown": 2,
+    "tracks": [
+      {
+        "track_id": 1,
+        "pos": [
+          0.934765636920929,
+          0.6798611283302307
+        ],
+        "bbox": [
+          0.91953125,
+          0.6583333333333333,
+          0.95,
+          0.7013888888888888
+        ],
+        "team": "OPP",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 2,
+        "pos": [
+          0.34101563692092896,
+          0.543749988079071
+        ],
+        "bbox": [
+          0.32734375,
+          0.5013888888888889,
+          0.3546875,
+          0.5861111111111111
+        ],
+        "team": "UNKNOWN",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 3,
+        "pos": [
+          0.828906238079071,
+          0.4784722328186035
+        ],
+        "bbox": [
+          0.7953125,
+          0.42916666666666664,
+          0.8625,
+          0.5277777777777778
+        ],
+        "team": "OPP",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 4,
+        "pos": [
+          0.37226563692092896,
+          0.43194442987442017
+        ],
+        "bbox": [
+          0.36171875,
+          0.39861111111111114,
+          0.3828125,
+          0.4652777777777778
+        ],
+        "team": "UNKNOWN",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 5,
+        "pos": [
+          0.408203125,
+          0.40416666865348816
+        ],
+        "bbox": [
+          0.4015625,
+          0.36666666666666664,
+          0.41484375,
+          0.44166666666666665
+        ],
+        "team": "OUR",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 6,
+        "pos": [
+          0.8929687738418579,
+          0.42222222685813904
+        ],
+        "bbox": [
+          0.85234375,
+          0.35833333333333334,
+          0.93359375,
+          0.4861111111111111
+        ],
+        "team": "OUR",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      }
+    ]
+  },
+  "possession": {
+    "state": "LOOSE_BALL",
+    "owner_track_id": -1,
+    "owner_team": 0,
+    "confidence": 0.0,
+    "age_s": 0.0
+  },
+  "score": {
+    "left": 0,
+    "right": 0,
+    "score_for": 0,
+    "score_against": 0,
+    "score_confidence": 0.9500000000000001,
+    "initialized": true,
+    "score_changed": false,
+    "previous_score": [
+      0,
+      0
+    ],
+    "clock_s": 210.0
+  },
+  "world": {
+    "valid": false,
+    "ball_valid": false,
+    "active_valid": false,
+    "players_valid": true,
+    "possession_valid": false,
+    "game_mode": "UNKNOWN",
+    "game_mode_confidence": 0.0
+  },
+  "control": {
+    "valid": false,
+    "model_fresh": false
+  },
+  "events": {
+    "goal_for": false,
+    "goal_against": false,
+    "shot_on_target": false,
+    "ball_won": false,
+    "ball_lost": false,
+    "score_changed": false,
+    "match_done": false
+  },
+  "timings": {
+    "model": 0.0006951000000299246,
+    "players": 0.011142500000005384,
+    "tracking": 0.0027652999997371808,
+    "active": 0.012365600000066479,
+    "ball": 0.0365815999998631,
+    "world": 0.000252700000146433,
+    "score": 17.752664500000265,
+    "total": 17.816695799999707,
+    "probe_wall": 33.86852799999997
+  }
+}

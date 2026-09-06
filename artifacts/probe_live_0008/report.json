@@ -1,0 +1,231 @@
+{
+  "image": "datasets/efootball_real_frames/frame_live_0008.jpg",
+  "capture": {
+    "frame": [
+      1280,
+      720
+    ],
+    "source": "offline_image",
+    "window_only": true
+  },
+  "model": {
+    "loaded": false,
+    "processor_loaded": false,
+    "fresh": false,
+    "load_error": null
+  },
+  "players": {
+    "raw_person": 0.0,
+    "pitch_validated": 0.0,
+    "ui_rejected": 0.0,
+    "size_rejected": 0.0,
+    "pitch_rejected": 0.0,
+    "player_candidates": 6.0,
+    "tracks": 6.0,
+    "marker_candidates": 1.0,
+    "active_confidence": 0.0,
+    "ball_confidence": 0.0,
+    "ball_predicted": 0.0,
+    "score_confidence": 0.9500000000000001,
+    "score_initialized": 1.0,
+    "score_changed": 0.0
+  },
+  "team": {
+    "our": 2,
+    "opp": 4,
+    "unknown": 0
+  },
+  "active": {
+    "valid": false,
+    "track_id": 5,
+    "confidence": 0.0,
+    "marker_candidates": 1,
+    "matched_track_id": 5,
+    "association_score": 1.0
+  },
+  "ball": {
+    "valid": false,
+    "confidence": 0.0,
+    "source": "UNKNOWN",
+    "predicted": false,
+    "position": [
+      0.5,
+      0.5
+    ],
+    "velocity": [
+      0.0,
+      0.0
+    ],
+    "rtdetr_confidence": 0.0,
+    "cv_confidence": 0.62,
+    "selected_source": "UNKNOWN",
+    "final_confidence": 0.0,
+    "field_valid": false,
+    "ui_rejected": false,
+    "temporal_consistency": false,
+    "cv_candidates": 43,
+    "detector_candidates": 0
+  },
+  "tracking": {
+    "players": 6,
+    "unknown": 0,
+    "tracks": [
+      {
+        "track_id": 1,
+        "pos": [
+          0.9917968511581421,
+          0.8222222328186035
+        ],
+        "bbox": [
+          0.98359375,
+          0.8097222222222222,
+          1.0,
+          0.8347222222222223
+        ],
+        "team": "OPP",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 2,
+        "pos": [
+          0.5625,
+          0.6104166507720947
+        ],
+        "bbox": [
+          0.5515625,
+          0.5638888888888889,
+          0.5734375,
+          0.6569444444444444
+        ],
+        "team": "OPP",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 3,
+        "pos": [
+          0.948437511920929,
+          0.5236111283302307
+        ],
+        "bbox": [
+          0.94140625,
+          0.5083333333333333,
+          0.95546875,
+          0.5388888888888889
+        ],
+        "team": "OUR",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 4,
+        "pos": [
+          0.587109386920929,
+          0.5305555462837219
+        ],
+        "bbox": [
+          0.5765625,
+          0.5013888888888889,
+          0.59765625,
+          0.5597222222222222
+        ],
+        "team": "OUR",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 5,
+        "pos": [
+          0.7890625,
+          0.3534722328186035
+        ],
+        "bbox": [
+          0.7625,
+          0.31527777777777777,
+          0.815625,
+          0.39166666666666666
+        ],
+        "team": "OPP",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      },
+      {
+        "track_id": 6,
+        "pos": [
+          0.735546886920929,
+          0.24375000596046448
+        ],
+        "bbox": [
+          0.715625,
+          0.2125,
+          0.75546875,
+          0.275
+        ],
+        "team": "OPP",
+        "confidence": 0.19999999999999998,
+        "missed": 0,
+        "lifecycle": "TrackLifecycle.CONFIRMED"
+      }
+    ]
+  },
+  "possession": {
+    "state": "LOOSE_BALL",
+    "owner_track_id": -1,
+    "owner_team": 0,
+    "confidence": 0.0,
+    "age_s": 0.0
+  },
+  "score": {
+    "left": 1,
+    "right": 0,
+    "score_for": 0,
+    "score_against": 1,
+    "score_confidence": 0.9500000000000001,
+    "initialized": true,
+    "score_changed": false,
+    "previous_score": [
+      0,
+      0
+    ],
+    "clock_s": 2003.0
+  },
+  "world": {
+    "valid": false,
+    "ball_valid": false,
+    "active_valid": false,
+    "players_valid": true,
+    "possession_valid": false,
+    "game_mode": "UNKNOWN",
+    "game_mode_confidence": 0.0
+  },
+  "control": {
+    "valid": false,
+    "model_fresh": false
+  },
+  "events": {
+    "goal_for": false,
+    "goal_against": false,
+    "shot_on_target": false,
+    "ball_won": false,
+    "ball_lost": false,
+    "score_changed": false,
+    "match_done": false
+  },
+  "timings": {
+    "model": 0.00013453899998694396,
+    "players": 0.012356287999978122,
+    "tracking": 0.0014657310000529833,
+    "active": 0.006874107000044205,
+    "ball": 0.02818911399992885,
+    "world": 0.00024692600004527776,
+    "score": 2.9125803489999953,
+    "total": 2.9623669720000407,
+    "probe_wall": 6.918549866999911
+  }
+}

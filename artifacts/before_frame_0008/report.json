@@ -1,0 +1,63 @@
+{
+  "image": "live_snapshots\\frame_0008.jpg",
+  "capture": {
+    "frame": [
+      1280,
+      720
+    ],
+    "source": "offline_image"
+  },
+  "players": {
+    "raw_person": 0.0,
+    "pitch_validated": 0.0,
+    "ui_rejected": 0.0,
+    "size_rejected": 0.0,
+    "pitch_rejected": 0.0,
+    "player_candidates": 4.0,
+    "tracks": 4.0,
+    "marker_candidates": 1.0,
+    "active_confidence": 0.10890493972746262,
+    "ball_confidence": 0.7,
+    "ball_predicted": 0.0,
+    "score_confidence": 0.0
+  },
+  "active": {
+    "valid": true,
+    "track_id": 3,
+    "confidence": 0.10890493972746262,
+    "marker_candidates": 1
+  },
+  "ball": {
+    "valid": true,
+    "confidence": 0.7,
+    "source": "CV",
+    "predicted": false,
+    "position": [
+      0.9414726307189542,
+      0.49306463326071165
+    ],
+    "velocity": [
+      0.0,
+      0.0
+    ]
+  },
+  "tracking": {
+    "players": 4,
+    "unknown": 0
+  },
+  "world": {
+    "valid": false,
+    "control_valid": false,
+    "possession": "LOOSE_BALL",
+    "owner_track_id": -1
+  },
+  "events": {
+    "goal_for": false,
+    "goal_against": false,
+    "shot_on_target": false,
+    "ball_won": false,
+    "ball_lost": false,
+    "score_changed": false,
+    "match_done": false
+  }
+}

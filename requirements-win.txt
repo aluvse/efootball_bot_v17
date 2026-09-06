@@ -1,0 +1,15 @@
+# Python 3.11 / Windows compatibility contract for V24.1.
+# PyTorch explicitly pairs torch 2.5.1 with torchvision 0.20.1 on Windows.
+numpy==1.26.4
+opencv-python>=4.9,<5
+scipy>=1.12,<2
+Pillow>=10,<12
+torch==2.5.1
+torchvision==0.20.1
+transformers==4.57.6
+timm>=1.0,<2
+pywin32>=306
+# Windows CPU/AMD runtime contract; CUDA is intentionally not required.
+dxcam>=0.0.5
+vgamepad>=0.1.0
+pytesseract>=0.3.10,<0.4

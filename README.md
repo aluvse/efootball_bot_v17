@@ -1,157 +1,270 @@
-# eFootball Agent V24.1 / V17 — ball/designated temporal fusion build
+# FALS — Football AI Learning System
 
-# eFootball Agent V24
+A research-oriented **Computer Vision + Reinforcement Learning system for learning football decision-making from visual game environments**.
 
-Новая архитектура screen-based football agent, написанная заново на уровне
-perception/world/control/RL contracts. Она не является копией Google Research
-Football: используется GRF как источник архитектурных идей для semantic state,
-action design, reward shaping и curriculum, а perception/control остаются
-специфичными для eFootball.
+The project is currently being developed and evaluated in **eFootball as its primary learning environment**.
 
-## Запуск
+The system combines:
 
-```powershell
-python brain.py
-```
-
-V24.1 / V16 keeps the V24 modular contracts and focuses on perception/runtime repair before PPO changes. PPO weights and hyperparameters were not tuned in this repair pass.
-
-## Структура
-
-- `brain.py` — единственная точка запуска.
-- `efootball_agent/perception/` — window capture, UI mask, players, team, active, ball, score.
-- `efootball_agent/world/` — possession, prediction, canonical world model.
-- `efootball_agent/tactical/` — bootstrap planner.
-- `efootball_agent/rl/` — 170D semantic encoder + structured categorical PPO.
-- `efootball_agent/control/` — safety gate + XInput.
-- `efootball_agent/tools/` — perception probe, live snapshots, stride metrics.
-- `efootball_agent/tests/` — regression/unit tests.
-
-## Действия
-
-PPO выбирает только семантические действия:
-`movement(9) + football_action(6) + sprint(2)`.
-Кнопка Y / goalkeeper rush отсутствует в action space.
-
-XInput mapping:
-- A = pass
-- B = cross
-- X = shoot
-- RB = call for pressure
-- LB = switch player
-- RT = sprint
-- Y = never emitted
-
-## PPO bootstrap
-
-До `teacher_steps` runtime использует проверяемый heuristic planner как
-bootstrap/behavior cloning teacher. После этого включается on-policy PPO.
-Состояние и policy checkpoint сохраняются в `checkpoints/v24_ppo.pt`.
-
-## Важные ограничения
-
-- Score detection — OCR/temporal heuristic, пока не гарантирует 100% событий.
-- Team identity — appearance heuristic + temporal tracker smoothing, не обученная на полном датасете eFootball модель.
-- Active marker — cyan CV detector + geometry-based association.
-- RT-DETR — proposal source; pipeline не делает его prediction «истиной».
-- Без локальных RT-DETR weights control по умолчанию не считается достаточно надёжным.
-- Полная онлайн-валидация на кадрах 300/1200/1500 невозможна из текущего архива: там нет самих кадров с этими номерами, только 24 unlabeled samples.
-
-## Goal / score events
-
-V24 has two event paths:
-1. HUD score OCR with temporal confirmation;
-2. conservative ball goal-line crossing fallback.
-
-The fallback uses goal-mouth geometry and ball direction and is not claimed to be
-100% ground truth. A score change is the preferred authoritative screen signal.
-
-## Install (Windows / venv)
-
-```powershell
-pip install -r requirements-win.txt
-```
-
-Put the existing local RT-DETR Hugging Face model in:
+* **Computer Vision** — detecting players, the ball, active-player markers, and score information;
+* **Realtime Tracking** — maintaining stable player and ball state between detector updates;
+* **World Modeling** — reconstructing a structured football state from visual observations;
+* **Tactical Decision-Making** — interpretable football heuristics used for bootstrap and evaluation;
+* **Reinforcement Learning** — semantic 170-dimensional observations with structured categorical PPO;
+* **Realtime Control** — translating semantic actions into XInput controller input;
+* **Safety & Validation** — fail-closed control based on perception and world-state confidence.
 
 ```text
-models/rtdetr_r50vd/
+Computer Vision
+       ↓
+Realtime Tracking
+       ↓
+World Model
+       ↓
+Tactical / RL Decision
+       ↓
+Safety Gate
+       ↓
+XInput Control
+       ↓
+Learning Environment
 ```
 
-The V24 runtime never falls back to full-screen capture and never emits Y / goalkeeper-rush.
+> **Status:** Experimental / Research
+> **Current architecture:** V17
+> **Current learning environment:** eFootball
+> **RL status:** Bootstrap + experimental PPO
+> **Planned:** V24 / V24.1
 
-## Diagnostics
+![FALS](photo_2026-09-08_10-02-37.jpg)
 
-```powershell
-python tools\verify_install.py
-python tools\perception_probe.py datasets\efootball_real_frames\frame_00.jpg --out probe_frame00
-python tools\live_perception_snapshot.py --seconds 8
-python tools\metrics.py your_video.mp4 --every 30 --max-frames 3000 --progress-every 100
+## What is being learned?
 
-# Equivalent module form:
-python -m efootball_agent.tools.verify_install
-python -m efootball_agent.tools.perception_probe datasets/efootball_real_frames/frame_00.jpg --out probe_frame00
-python -m efootball_agent.tools.live_perception_snapshot --seconds 8
-python -m efootball_agent.tools.metrics your_video.mp4 --every 30 --max-frames 3000 --progress-every 100
-pytest -q
+The long-term goal is to develop a football-playing policy that can make increasingly complex decisions from a structured representation of the game.
+
+The current research focuses on learning and evaluating:
+
+* spatial awareness;
+* player control;
+* possession behavior;
+* attacking movement;
+* passing and shooting decisions;
+* pressing and ball recovery;
+* action timing;
+* tactical decision-making.
+
+The project deliberately separates **perception, world-state estimation, tactical reasoning, learning, and control** instead of training a single end-to-end pixel-to-action model.
+
+## Current Learning Pipeline
+
+The current runtime uses an interpretable tactical planner as a bootstrap teacher.
+
+```text
+Visual Observation
+        │
+        ▼
+   WorldState
+        │
+        ├───────────────┐
+        ▼               │
+Tactical Planner        │
+        │               │
+        ▼               │
+Teacher Actions         │
+        │               │
+        └──────┐        │
+               ▼        │
+       Behavior Cloning │
+               │        │
+               ▼        │
+          Structured PPO◄┘
+               │
+               ▼
+        Semantic Actions
+               │
+               ▼
+          Safety Gate
+               │
+               ▼
+         XInput Control
 ```
 
-The supplied archive has 24 unlabeled real frames, so it does not contain exact frame numbers 300/1200/1500. Those specific regression probes require the original video or those frames as files.
+The bootstrap phase is not a separate prototype: it is part of the current runtime. The system collects valid WorldState/action pairs from the heuristic planner, performs behavior-cloning updates, and then transitions to on-policy PPO once the configured teacher stage is complete.
 
-## Realtime RT-DETR acceleration — AMD/CPU contract
+## Semantic Reinforcement Learning
 
-RT-DETR is asynchronous and never blocks the capture/perception thread. The
-worker uses latest-frame semantics with a bounded pending slot, source-frame
-timestamps, exact detector age, and CPU thread tuning.
+The learning system does not feed raw pixels directly into PPO.
 
-This V24.1 / V16 Windows build is intentionally CPU-only for the supplied AMD host. An NVIDIA-specific runtime is not part of this contract.
+The current semantic encoder exposes a **170-dimensional observation contract** containing information such as:
 
-Default realtime settings are tuned for the supplied Ryzen 7 5700X3D:
-- RT-DETR worker: 6 Hz
-- PyTorch intra-op threads: 8
-- PyTorch inter-op threads: 1
-- worker CPU affinity: automatic best-effort isolation to the upper logical
-  CPUs
-- detector input: 640x640 when supported by the local image processor
-- pending model queue: 1 frame; newest frame replaces older pending work
-- live test: no JPEG writes unless explicitly requested
+* ball position, velocity, confidence, and validity;
+* control and designated players;
+* up to 11 own and 11 opponent players;
+* possession state and confidence;
+* score and match clock;
+* tactical features;
+* world/control/temporal validity;
+* temporal ball displacement and persistence;
+* possession owner;
+* game mode;
+* predicted ball positions at multiple horizons.
 
-Tesseract OCR also runs in a separate latest-frame worker in the live pipeline
-so OCR subprocess latency cannot stall capture/tracking.
+The PPO policy uses separate categorical heads for:
 
-## V9 realtime tracker
-V9 uses asynchronous RT-DETR as a global re-detector and deterministic Hungarian + constant-velocity + local Lucas-Kanade flow for short player-detection gaps. Ball tracking uses short local CV continuity plus an alpha-beta filter. This is a CPU-first realtime architecture; PPO is unchanged.
+```text
+Movement:       9 actions
+Football:       6 actions
+Sprint:         2 actions
+```
 
+with a shared neural representation and value head. The current implementation includes GAE, clipped PPO updates, entropy regularization, gradient clipping, minibatch training, and target-KL stopping.
 
-## V12 acceptance focus
-V12 keeps the V11 ball/score work and fixes the next live bottleneck: persistent player tracks across async RT-DETR gaps, active-player association through short LOST intervals, and world/control validity based on bounded maintained tracks rather than detector-frame coincidence. PPO remains untrained and is not enabled for live rollout until the observation-only acceptance metrics pass.
+The 170-dimensional representation is already implemented in the current encoder. Future V24/V24.1 work is focused on refining the state contract and learning architecture rather than introducing semantic observations from scratch.
 
-Project entrypoint: `python brain.py` (no `main.py`).
+## Realtime Perception
 
+A major engineering challenge is that visual detection is not instantaneous or perfectly reliable.
 
-## V14 focus
-Active-player recovery now includes bounded local cyan evidence around tracked player heads, plus slower bounded confidence decay during short marker gaps. This is intended to address live active dropouts while keeping the fail-closed control gate.
+The current perception stack therefore does not depend on obtaining a fresh detector result for every processed frame.
 
+RT-DETR operates asynchronously while the realtime perception loop continues using:
 
-## V15 architecture step
+* latest-frame semantics;
+* bounded pending work;
+* detector source timestamps;
+* detector-age tracking;
+* player tracking;
+* local optical-flow recovery;
+* bounded prediction;
+* active-player temporal memory;
+* ball temporal prediction;
+* confidence and validity gates.
 
-V15 adds a bounded 4-state WorldHistory, separates active/designated/possession semantics, adds coarse game_mode, introduces StickyControlState, and adds a GRF-inspired 8-channel WorldTensor encoder. PPO remains a downstream consumer and is not claimed trained.
+The world model exposes explicit validity information so that perception uncertainty can propagate into control decisions instead of being silently ignored.
 
+## Why the World Model Matters
 
-## V17 focus
+The system explicitly separates several concepts that are easy to conflate in a visual football environment:
 
-V17 keeps the V16 capture, CPU RT-DETR scheduler, player tracking, active-player
-control memory, sticky control layer, WorldHistory and semantic PPO contracts.
-The new step is temporal fusion of `ball -> designated player -> possession`:
+```text
+Active Player
+       ≠
+Designated Player
+       ≠
+Possession Owner
+```
 
-- designated player uses bounded switch hysteresis, previous-player bonus, team
-  continuity and movement-to-ball evidence; it is separate from the active marker
-  and possession owner.
-- short ball-loss gaps preserve the last possession owner with confidence decay;
-  sustained competing evidence is still required to switch ownership.
-- short `PREDICTED` ball states are explicitly usable by the bounded WorldState
-  bridge when their confidence/age remain inside the configured limits.
-- UNKNOWN ball remains fail-closed for control and never creates new attack intent.
+These identities are maintained independently because the player currently controlled by the game, the player most relevant to the tactical layer, and the player believed to own the ball are not necessarily the same.
 
-V17 does not add a new entry point, does not add CUDA/NVIDIA dependencies, and
-does not train or tune PPO.
+The current world model also maintains temporal history, game mode, score, tactical features, predictions, and confidence/validity information.
+
+## Deterministic Tactical Bootstrap
+
+The tactical planner is deliberately small and inspectable.
+
+Instead of trying to learn all football behavior from random exploration immediately, it provides an interpretable initial policy based on structured WorldState.
+
+Current decisions include:
+
+* moving toward the opponent goal;
+* shooting when position and shot quality are sufficient;
+* passing when space and expected threat justify it;
+* crossing in advanced positions;
+* pressing when the opponent controls possession;
+* moving a nearby player toward a loose ball.
+
+The planner is used as a teacher for the initial behavior-cloning stage before PPO becomes the active policy.
+
+## Reward Design
+
+The reward system is intentionally **goal-first with bounded shaping**.
+
+Current event rewards include:
+
+```text
+Goal for        +10.0
+Goal against    -10.0
+Shot on target   +1.0
+Ball won        +0.5
+Ball lost       -0.6
+```
+
+Additional shaping uses:
+
+* possession reward;
+* forward ball progress;
+* bounded retreat shaping.
+
+Shaping is clipped so that local movement rewards do not overwhelm major football events such as scoring or conceding.
+
+## Safety and Control
+
+The control layer is deliberately fail-closed.
+
+A policy action does not automatically become controller input: it must first pass the world/control validity gate.
+
+The current runtime requires sufficiently reliable perception, a usable active player, enough recent player tracks, valid game state, and bounded ball-prediction conditions before allowing control. Otherwise the system falls back to a neutral action.
+
+This makes perception uncertainty an explicit part of the control contract rather than an afterthought.
+
+## Current Status
+
+### V17 — Current
+
+V17 is the current implemented architecture.
+
+Its primary focus is **realtime reliability and temporal state reconstruction**.
+
+Current implemented components include:
+
+* asynchronous RT-DETR;
+* player detection and tracking;
+* team classification;
+* cyan-marker active-player detection;
+* local optical-flow recovery;
+* ball tracking and prediction;
+* possession estimation;
+* designated-player selection;
+* temporal world-state fusion;
+* score detection;
+* game-mode estimation;
+* tactical bootstrap planning;
+* semantic 170D state encoding;
+* structured categorical PPO;
+* behavior-cloning bootstrap;
+* safety-gated XInput control.
+
+The PPO implementation is functional as an experimental learning component, but it should **not** be interpreted as a finished or well-trained football-playing policy yet. The current work is focused on building a stable perception → state → action foundation on which stronger learning experiments can be evaluated.
+
+### V24 / V24.1 — Planned
+
+V24/V24.1 are the next planned iteration.
+
+The goal is to preserve the strongest V17 realtime work while refining the contracts between:
+
+```text
+Perception
+    ↓
+World Model
+    ↓
+Tactical Layer
+    ↓
+Reinforcement Learning
+    ↓
+Control
+```
+
+Planned work includes:
+
+* refined perception/world/control contracts;
+* improved semantic WorldState;
+* improved observation design;
+* structured categorical PPO improvements;
+* teacher/bootstrap improvements;
+* richer reward design;
+* stronger tactical behavior;
+* improved event and game-phase handling;
+* improved training/evaluation infrastructure;
+* more robust automated match evaluation.
+
+V24/V24.1 are **future architecture targets**, not claims about the currently validated capabilities of the system.
